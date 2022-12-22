@@ -6,7 +6,7 @@
       </div>
       <nav class="header__menu-block col-sm">
         <ul class="header__menu list-inline">
-          <li class="header__menu-item list-inline-item text-muted align-middle"><u>вход</u></li>
+          <li class="header__menu-item list-inline-item text-muted align-middle" data-toggle="modal" data-target="#exampleModal"><u>вход</u></li>
           <li class="header__menu-item list-inline-item text-muted">/</li>
           <li class="header__menu-item list-inline-item text-muted"><u>регистрация</u></li>
         </ul>
