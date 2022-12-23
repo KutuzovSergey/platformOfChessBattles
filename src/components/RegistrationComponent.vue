@@ -14,8 +14,12 @@
               <img src="@/assets/user.png" alt="user">
             </div>
             <div class="registration__photo-button">
-              <button class="btn btn-secondary">c</button>
-              <button class="btn btn-secondary">l</button>
+              <button class="btn btn-secondary">
+                <img src="@/assets/icon/camera.svg" alt="camera">
+              </button>
+              <button class="btn btn-secondary">
+                <img src="@/assets/icon/upload.svg" alt="upload">
+              </button>
             </div>
           </div>
           <div class="col-sm">
@@ -48,20 +52,36 @@
               <div>
                 <span>Выберите пол</span>
               </div>
-              <label><input type="radio">ж</label>
-              <label><input type="radio">м</label>
-              <label><input type="radio">другое</label>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" name="woman">
+                <label class="form-check-label" for="woman">ж</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" name="male">
+                <label class="form-check-label" for="male">м</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" name="third_gender">
+                <label class="form-check-label" for="third_gender">другое</label>
+              </div>
             </div>
             <div class="col-sm">
               <div>
                 <span>Выберите страну</span>
               </div>
               <div>
-                <select name="" id="">
+                <select class="form-select" name="country" id="">
                   <option value="">Россия</option>
+                  <option value="">Кыргистан</option>
+                  <option value="">Казахстан</option>
+                  <option value="">Украина</option>
                 </select>
               </div>
             </div>
+          </div>
+          <div>
+            <label for="agreement" class="form-check-label">Согласие на обработку персональных данных</label>
+            <input class="form-check-input" type="checkbox" id="agreement">
           </div>
         </div>
         

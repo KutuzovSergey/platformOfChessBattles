@@ -1,6 +1,8 @@
 <template>
   <div class="home">
     <HeaderComponent />
+    <HomeContentComponent />
+    <FooterComponent />
     <LoginComponent v-if="login" />
     <RegistrationComponent v-if="registration" />
   </div>
@@ -9,6 +11,8 @@
 <script>
 // @ is an alias to /src
 import HeaderComponent from '@/components/HeaderComponent.vue'
+import HomeContentComponent from '@/components/HomeContentComponent.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 import LoginComponent from '@/components/LoginComponent.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
 
@@ -16,13 +20,15 @@ export default {
   name: 'HomeView',
   components: {
     HeaderComponent,
+    HomeContentComponent,
+    FooterComponent,
     LoginComponent,
     RegistrationComponent,
   },
   data(){
     return {
       login: false,
-      registration: true
+      registration: false
     }
   }
 }
@@ -57,5 +63,10 @@ export default {
 
 .modal__window-label{
   margin: 0;
+}
+
+.modal__window-button{
+  margin: 10px auto;
+  display: block;
 }
 </style>
