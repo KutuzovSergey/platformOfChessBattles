@@ -11,7 +11,7 @@
         <div class="row">
           <div class="registration__photo col-sm">
             <div class="registration__photo-imges">
-              <img src="@/assets/user.png" alt="user">
+              <img src="@/assets/user/user.png" alt="user">
             </div>
             <div class="registration__photo-button">
               <button class="btn btn-secondary">
