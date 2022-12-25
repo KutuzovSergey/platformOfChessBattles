@@ -1,64 +1,97 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-10">
+    <div class="row content">
+      <div class="col-9">
         <div class="container">
           <div class="row">
             <div class="col-6">
               <div class="container user">
-            <div class="row">
-              <div class="col-4">
-                <div class="user__photo">
-                  <img src="@/assets/user/user.png" alt="user">
-                </div>
-                <div class="user__change">
-                  <button class="btn btn-secondary">изминить</button>
-                </div>
-              </div>
-              <div class="col-8">
-                <div class="user__name">
-                  <span>Николай</span>
-                  <span>Абрамович</span>
-                </div>
-                <div class="user__rating row">
-                  <div class="user__rating_image col-8">
-                    <img src="@/assets/user/rating3.png" alt="rating">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="user__photo">
+                      <img src="@/assets/user/user.png" alt="user">
+                    </div>
+                    <div class="user__change">
+                      <button class="btn btn-secondary">изминить</button>
+                    </div>
                   </div>
-                  <div class="col-4 user__rating-number">
-                    <span>6/10</span>
+                  <div class="col-8">
+                    <div class="user__name">
+                      <div class="user__name_block user__name_FCs">
+                        <span>Елена</span>
+                        <span>Абрамович</span>
+                      </div>
+                      <div class="user__name_block user__name_nickname">
+                        <span>Игровой никнейм</span>
+                        <span>Фемка</span>
+                      </div>
+                    </div>
+                    <div class="user__rating row">
+                      <div class="user__rating_image col-10">
+                        <img src="@/assets/user/rating3.png" alt="rating">
+                      </div>
+                      <div class="col-2 user__rating-number">
+                        <span>6/10</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div class="schedule"></div>
             </div>
-          </div>
-          <div class="schedule"></div>
-            </div>
-            <div class="col-6 enemy">
-              <div class="enemy__photo">
-                <img src="@/assets/user/userUnknown.png" alt="user-unknown">
-              </div>
-              <div class="enemy__name">
-                <span>противник</span>
-              </div>
-              <div class="enemy__rating">
-                <div class="enemy__rating_image">
-                  <img src="@/assets/user/rating3.png" alt="rating">
-                </div>
-                <div class="enemy__rating-number">
-                  <span>6/10</span>
+            <div class="col-6 container">
+              <div class="container user">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="user__photo">
+                      <img src="@/assets/user/userUnknown.png" alt="user-unknown">
+                    </div>
+                    <div class="user__change">
+                      <button class="btn btn-secondary">написать</button>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="user__name">
+                      <span>противник</span>
+                    </div>
+                    <div class="user__rating row">
+                      <div class="user__rating_image col-10">
+                        <img src="@/assets/user/rating1.png" alt="rating">
+                      </div>
+                      <div class="col-2 user__rating-number">
+                        <span>1/10</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="schedule"></div>
             </div>
           </div>
         </div>
-        <div class="">
+        <div class="finish_game">
           <button class="btn btn-secondary">начать игру</button>
         </div>
       </div>
-      <div class="col-2 users">
+      <div class="col-3 users">
         <div class="users__headline">
-          <span>на сайте</span>
+          <span>пользователи</span>
+        </div>
+        <div class="input-group">
+          <input type="text" class="form-control users__search">
+          <button class="btn btn-outline-secondary users__search" type="button">
+            <img src="@/assets/icon/search.svg" alt="search">
+          </button>
+        </div>
+        <div class="users__search-extra">
+          <div class="users__search-extra-block">
+            <label for="agreement" class="form-check-label users__search-extra-label">все</label>
+            <input class="form-check-input users__search-extra-checkbox" type="checkbox">
+          </div>
+          <div class="users__search-extra-block">
+            <label for="agreement" class="form-check-label users__search-extra-label">онлайн</label>
+            <input class="form-check-input users__search-extra-checkbox" type="checkbox">
+          </div>
         </div>
         <div class="users__list scrollspy-example">
             <div class="container">
@@ -425,22 +458,6 @@
           </div>
       </div>
     </div>
-
-    <!-- <div class="container">
-      <div class="row content">
-        <div class="col-5">
-          
-        </div>
-        <div class="col-4 enemy">
-          
-        </div>
-        <div class="col-3 users">
-          
-          
-        </div>
-      </div>
-      
-    </div> -->
   </div>
 
 </template>
@@ -465,6 +482,7 @@ export default {
 }
 
 .user{
+  height: 230px;
   padding: 20px;
   box-shadow: 0 0 0 2px rgba(119, 118, 118, 0.2);
 
@@ -473,7 +491,23 @@ export default {
     height: 150px;
   }
 
+  &__change{
+    width: 100%;
+  }
+  
+  &__change>button{
+    display: block;
+    margin: auto;
+  }
+
   &__name{
+    height: 50px;
+    display: flex;
+  }
+
+  &__name_block{
+    width: 50%;
+    height: 50px;
     display: flex;
     flex-direction: column;
   }
@@ -493,33 +527,6 @@ export default {
 
   &__rating_image>img{
     width: 100%;
-    height: 50px;
-  }
-}
-
-.enemy{
-
-  &__photo{
-    width: 150px;
-    height: 150px;
-    margin: auto;
-  }
-
-  &__photo>img{
-    width: 150px;
-    height: 150px;
-  }
-
-  &__rating{
-    display: flex;
-  }
-
-  &__rating_image{
-    width: 70%;
-  }
-
-  &__rating_image>img{
-    width: 100%;
     height: auto;
   }
 }
@@ -531,6 +538,17 @@ export default {
   background-color: dimgray;
 }
 
+.finish_game{
+  width: 100%;
+  height: auto;
+  padding-top: 20px;
+}
+
+.finish_game>button{
+  display: block;
+  margin: auto;
+}
+
 .users{
 
   &__headline{
@@ -538,12 +556,39 @@ export default {
   }
 
   &__headline>span{
+    display: block;
     margin: auto;
+    text-align: center;
+  }
+
+  &__search{
+    border-radius: 0;
+  }
+
+  &__search-extra{
+    display: flex;
+    width: 100%;
+    height: 30px;
+    border: 1px solid rgb(0, 0, 0);
+    box-shadow: 0 0 0 2px rgba(119, 118, 118, 0.2);
+    background-color: rgb(189, 185, 185);
+  }
+
+  &__search-extra-block{
+    width: 50%;
+    height: auto;
+    margin: auto 0;
+    padding: 0 20px;
+    display: flex;
+  }
+
+  &__search-extra-checkbox{
+    margin: auto 5px;
   }
 
   &__list{
     width: 100%;
-    height: 400px;
+    height: 430px;
     overflow: auto;
     border: 1px solid rgb(0, 0, 0);
     box-shadow: 0 0 0 2px rgba(119, 118, 118, 0.2);
