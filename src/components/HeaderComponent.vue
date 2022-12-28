@@ -6,9 +6,13 @@
       </div>
       <nav class="header__menu-block col-sm">
         <ul class="header__menu list-inline">
-          <li class="header__menu-item header__menu-item_text list-inline-item text-muted"><u>вход</u></li>
+          <li 
+          class="header__menu-item header__menu-item_text list-inline-item text-muted" 
+          @click="openModalLogin"><u>вход</u></li>
           <li class="header__menu-item list-inline-item text-muted">/</li>
-          <li class="header__menu-item header__menu-item_text list-inline-item text-muted"><u>регистрация</u></li>
+          <li 
+          class="header__menu-item header__menu-item_text list-inline-item text-muted" 
+          @click="openModalRegistration"><u>регистрация</u></li>
         </ul>
       </nav>
     </div>
@@ -25,9 +29,12 @@ export default {
     return{}
   },
   methods: {
-    openModal(){
-      
-    }
+    openModalLogin(){
+      this.$store.dispatch('SET_LOGIN', true);
+    },
+    openModalRegistration(){
+      this.$store.dispatch('SET_REGISTRATION', true);
+    },
   }
 }
 </script>

@@ -579,6 +579,7 @@ export default {
     height: auto;
     margin: auto 0;
     padding: 0 20px;
+    padding: 0 20px;
     display: flex;
   }
 

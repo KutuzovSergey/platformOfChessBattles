@@ -3,49 +3,74 @@
     <div class="card modal-window_body">
       <div class="card-header modal-window-head">
         <h5 class="card-title">Регистрация</h5>
-        <button type="button" class="close">
+        <button type="button" class="close" @click="closeRegistration">
           <span>&times;</span>
         </button>
       </div>
-      <form action="" class="registration card-body">
+      <form @submit.prevent="sendData" class="registration card-body">
         <div class="row">
           <div class="registration__photo col-sm">
             <div class="registration__photo-imges">
               <img src="@/assets/user/user.png" alt="user">
             </div>
             <div class="registration__photo-button">
-              <button class="btn btn-secondary">
+              <button class="btn btn-secondary" >
                 <img src="@/assets/icon/camera.svg" alt="camera">
               </button>
-              <button class="btn btn-secondary">
+              <button class="btn btn-secondary" @click.prevent="downloadImg">
                 <img src="@/assets/icon/upload.svg" alt="upload">
               </button>
+              <input 
+                type="file" 
+                v-show="false" 
+                id="user_photo"
+                @change='getUserPhoto'>
             </div>
           </div>
           <div class="col-sm">
             <div class="mb-3">
               <label for="name" class="form-label modal__window-label">логин</label>
-              <input type="text" name="name" class="form-control">
+              <input 
+                type="text" 
+                name="name" 
+                class="form-control" 
+                v-model="registration.name">
             </div>
             <div class="mb-3">
               <label for="password" class="form-label modal__window-label">пароль</label>
-              <input type="password" name="password" class="form-control">
+              <input 
+                type="password" 
+                name="password" 
+                class="form-control"
+                v-model="registration.password">
             </div>
             <div class="mb-3">
               <label for="repeatPassword" class="form-label modal__window-label">повторить пароль</label>
-              <input type="password" name="repeatPassword" class="form-control">
+              <input 
+                type="password" 
+                name="repeatPassword" 
+                class="form-control"
+                v-model="registration.repeatPassword">
             </div>
           </div>
         </div>
 
         <div>
           <div class="mb-3">
-            <label for="name" class="form-label modal__window-label">номер</label>
-            <input type="text" name="name" class="form-control">
+            <label for="number" class="form-label modal__window-label">номер</label>
+            <input 
+              type="text" 
+              name="number" 
+              class="form-control"
+              v-model="registration.number">
           </div>
           <div class="mb-3">
-            <label for="name" class="form-label modal__window-label">почта</label>
-            <input type="text" name="name" class="form-control">
+            <label for="mail" class="form-label modal__window-label">почта</label>
+            <input 
+              type="text" 
+              name="mail" 
+              class="form-control"
+              v-model="registration.mail">
           </div>
           <div class="row">
             <div class="col-sm">
@@ -85,17 +110,65 @@
           </div>
         </div>
         
-        <button class="btn btn-secondary modal__window-button" type="submit">вход</button>
+        <button class="btn btn-secondary modal__window-button" type="submit">регистрация</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
+
 export default {
   name: 'RegistrationComponent',
   props: {
     msg: String
+  },
+  data () {
+    return {
+      v$: useVuelidate(),
+      accept: [ '.png', '.jpg', '.jpeg', '.gif' ],
+      registration: {
+        img: null,
+        name: null,
+        password: null,
+        repeatPassword: null,
+        number: null,
+        mail: null,
+        gender: null,
+        country: null,
+      }
+    }
+  },
+  methods: {
+    closeRegistration () {
+      this.$store.dispatch('SET_REGISTRATION', false);
+    },
+    sendData () {
+      console.log(this.registration);
+    },
+    downloadImg () {
+      const input = document.getElementById('user_photo');
+      const params = this.accept;
+
+      if( Array.isArray(params) ){
+        input.setAttribute('accept', params.join(','));
+      }
+      
+      input.click();
+    },
+    getUserPhoto (e) {
+      this.registration.img = e.target.files;
+      console.log(e.target.files);
+    }
+  },
+  validations: {
+    registration: {
+      name: { required },
+      password: { required, minLength: minLength(6) },
+      repeatPassword: { required },
+    }
   }
 }
 </script>

@@ -21,8 +21,6 @@ export default {
   },
   data(){
     return {
-      login: false,
-      registration: false
     }
   }
 }

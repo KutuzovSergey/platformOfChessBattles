@@ -3,8 +3,8 @@
     <HeaderComponent />
     <HomeContentComponent />
     <FooterComponent />
-    <LoginComponent v-if="login" />
-    <RegistrationComponent v-if="registration" />
+    <LoginComponent v-if="getLogin" />
+    <RegistrationComponent v-if="getRegistration" />
   </div>
 </template>
 
@@ -15,6 +15,7 @@ import HomeContentComponent from '@/components/HomeContentComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import LoginComponent from '@/components/LoginComponent.vue'
 import RegistrationComponent from '@/components/RegistrationComponent.vue'
+// import { mapGetters } from 'vuex'
 
 export default {
   name: 'HomeView',
@@ -27,10 +28,20 @@ export default {
   },
   data(){
     return {
-      login: false,
-      registration: false
     }
-  }
+  },
+  computed:{
+    getLogin () {
+      return this.$store.getters.LOGIN
+    },
+    getRegistration () {
+      return this.$store.getters.REGISTRATION
+    }
+    // registration () {
+    //   return ...mapGetters(['REGISTRATION'])
+    // }
+    
+  },
 }
 </script>
 
