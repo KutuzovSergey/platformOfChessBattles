@@ -15,7 +15,7 @@
             name="name" 
             v-model.trim="login.neme" 
             class="form-control">
-          <span v-if="v$.login.neme.$error">Поле не заполнено</span>
+          <span v-if="v$.login.neme.$error" class="modal__error-text">Поле не заполнено</span>
         </div>
         <div class="mb-3">
           <label for="password" class="form-label modal__window-label">пароль</label>
@@ -24,7 +24,7 @@
             name="password" 
             v-model.trim="login.password" 
             class="form-control">
-          <span v-if="v$.login.password.$error">Пароль не может быть меньше {{v$.login.password.minLength.$params.min}}</span>
+          <span v-if="v$.login.password.$error" class="modal__error-text">Пароль не может быть меньше {{v$.login.password.minLength.$params.min}}</span>
         </div>
         <button class="btn btn-secondary modal__window-button" type="submit">вход</button>
       </form>
@@ -58,15 +58,11 @@ export default {
       this.$store.dispatch('SET_LOGIN', false);
     },
     sendData () {
-      // console.log(this.login);
-      // console.log(this.v$.login.password.$error);
-      const result = this.v$.$validate();
-      // result.catch(alert);
-      console.log(result);
-      if(!result){
-        // this.v$.$touch();
-        console.log('5');
+      this.v$.$validate();
+      
+      if(!this.v$.$error){
         this.$router.push('/user');
+        this.$store.dispatch('SET_LOGIN', false);
         return
       }
       

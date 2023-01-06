@@ -61,7 +61,9 @@ export default {
     margin: auto;
     text-align: center;
     font-size: 1.5rem;
+    font-family: 'Simonetta', cursive;
   }
 }
-  @import'~bootstrap/dist/css/bootstrap.css'
+  // @import url('~@/assets/fonts/Simonetta-Regular.ttf');
+  @import'~bootstrap/dist/css/bootstrap.css';
 </style>

@@ -80,4 +80,8 @@ export default {
   margin: 10px auto;
   display: block;
 }
+
+.modal__error-text{
+  color: rgba(244, 44, 44, 0.99);
+}
 </style>

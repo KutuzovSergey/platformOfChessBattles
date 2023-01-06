@@ -11,7 +11,7 @@
         <div class="row">
           <div class="registration__photo col-sm">
             <div class="registration__photo-imges">
-              <img src="@/assets/user/user.png" alt="user">
+              <img src="@/assets/user/user.png" alt="user" class="registration__user">
             </div>
             <div class="registration__photo-button">
               <button class="btn btn-secondary" >
@@ -35,6 +35,7 @@
                 name="name" 
                 class="form-control" 
                 v-model="registration.name">
+                <span v-if="v$.registration.name.$error" class="modal__error-text">обязательное поле</span>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label modal__window-label">пароль</label>
@@ -43,14 +44,17 @@
                 name="password" 
                 class="form-control"
                 v-model="registration.password">
+                <span v-if="v$.registration.password.$error" class="modal__error-text">обязательное поле</span>
+                <span v-else-if="v$.registration.password.minLength" class="modal__error-text"></span>
             </div>
             <div class="mb-3">
-              <label for="repeatPassword" class="form-label modal__window-label">повторить пароль</label>
+              <label for="confirmPassword" class="form-label modal__window-label">повторить пароль</label>
               <input 
                 type="password" 
-                name="repeatPassword" 
+                name="confirmPassword"
+                placeholder="confirm password" 
                 class="form-control"
-                v-model="registration.repeatPassword">
+                v-model="registration.confirmPassword">
             </div>
           </div>
         </div>
@@ -78,15 +82,30 @@
                 <span>Выберите пол</span>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" name="woman">
+                <input 
+                  type="radio" 
+                  class="form-check-input" 
+                  name="woman"
+                  vulue="woman"
+                  v-model="registration.gender">
                 <label class="form-check-label" for="woman">ж</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" name="male">
+                <input 
+                  type="radio" 
+                  class="form-check-input" 
+                  name="male"
+                  value="male"
+                  v-model="registration.gender">
                 <label class="form-check-label" for="male">м</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" name="third_gender">
+                <input 
+                  type="radio" 
+                  class="form-check-input" 
+                  name="third_gender"
+                  value="third_gender"
+                  v-model="registration.gender">
                 <label class="form-check-label" for="third_gender">другое</label>
               </div>
             </div>
@@ -96,17 +115,31 @@
               </div>
               <div>
                 <select class="form-select" name="country" id="">
-                  <option value="">Россия</option>
-                  <option value="">Кыргистан</option>
-                  <option value="">Казахстан</option>
-                  <option value="">Украина</option>
+                  <option value="Eretrea">Эретрея</option>
+                  <option value="Russia">Россия</option>
+                  <option value="Kyrgyzstan">Кыргызстан</option>
+                  <option value="Kazakhstan">Казахстан</option>
+                  <option value="Tajikistan">Таджикистан</option>
+                  <option value="Ukraine">Украина</option>
+                  <option value="Belarus">Белоруссия</option>
+                  <option value="Canada">Канада</option>
+                  <option value="Australia">Австралия</option>
+                  <option value="Atlantis">Атлантида</option>
+                  <option value="Turkey">Турция</option>
+                  <option value="Germany">Германия</option>
+                  <option value="Greece">Греция</option>
                 </select>
               </div>
             </div>
           </div>
           <div>
             <label for="agreement" class="form-check-label">Согласие на обработку персональных данных</label>
-            <input class="form-check-input" type="checkbox" id="agreement">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="agreement"
+              value="true" 
+              v-model="registration.agreement">
           </div>
         </div>
         
@@ -133,11 +166,12 @@ export default {
         img: null,
         name: null,
         password: null,
-        repeatPassword: null,
+        confirmPassword: null,
         number: null,
         mail: null,
         gender: null,
         country: null,
+        agreement: false,
       }
     }
   },
@@ -147,6 +181,13 @@ export default {
     },
     sendData () {
       console.log(this.registration);
+
+      this.v$.$validate();
+
+      if (!this.v$.$error) {
+        this.$router.push('/user');
+        this.$store.dispatch('SET_REGISTRATION', false);
+      }
     },
     downloadImg () {
       const input = document.getElementById('user_photo');
@@ -160,14 +201,35 @@ export default {
     },
     getUserPhoto (e) {
       this.registration.img = e.target.files;
-      console.log(e.target.files);
+
+      if (!e.target.files.length) {
+        return
+      }
+
+      const files = Array.from(e.target.files);
+
+      files.forEach( file => {
+        // if (!files.type.match('image')) {
+        //   return
+        // }
+
+        const reader = new FileReader();
+
+        reader.onload = ev => {
+          const img = document.querySelector('img.registration__user');
+          img.src = ev.target.result;
+        }
+
+        reader.readAsDataURL(file)
+      }
+     );
     }
   },
   validations: {
     registration: {
       name: { required },
       password: { required, minLength: minLength(6) },
-      repeatPassword: { required },
+      confirmPassword: { required },
     }
   }
 }
