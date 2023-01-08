@@ -3,7 +3,7 @@
     <div class="card modal-window_body">
       <div class="card-header modal-window-head">
         <h5 class="card-title">Регистрация</h5>
-        <button type="button" class="close" @click="closeRegistration">
+        <button type="button" @click="closeRegistration">
           <span>&times;</span>
         </button>
       </div>
@@ -11,10 +11,17 @@
         <div class="row">
           <div class="registration__photo col-sm">
             <div class="registration__photo-imges">
+              <button 
+                type="button" 
+                class="registration__photo-delete" 
+                v-if="deletePhoto"
+                @click="deletePhotoUser">
+                <span>&times;</span>
+              </button>
               <img src="@/assets/user/user.png" alt="user" class="registration__user">
             </div>
             <div class="registration__photo-button">
-              <button class="btn btn-secondary" >
+              <button class="btn btn-secondary">
                 <img src="@/assets/icon/camera.svg" alt="camera">
               </button>
               <button class="btn btn-secondary" @click.prevent="downloadImg">
@@ -172,7 +179,8 @@ export default {
         gender: null,
         country: null,
         agreement: false,
-      }
+      },
+      deletePhoto: false,
     }
   },
   methods: {
@@ -200,7 +208,6 @@ export default {
       input.click();
     },
     getUserPhoto (e) {
-      this.registration.img = e.target.files;
 
       if (!e.target.files.length) {
         return
@@ -209,9 +216,10 @@ export default {
       const files = Array.from(e.target.files);
 
       files.forEach( file => {
-        // if (!files.type.match('image')) {
-        //   return
-        // }
+
+        if (!file.type.match('image')) {
+          return
+        }
 
         const reader = new FileReader();
 
@@ -220,10 +228,18 @@ export default {
           img.src = ev.target.result;
         }
 
-        reader.readAsDataURL(file)
+        reader.readAsDataURL(file);
+        this.deletePhoto = true;
+        this.registration.img = file;
       }
      );
-    }
+    },
+    deletePhotoUser () {
+      const img = document.querySelector('img.registration__user');
+      img.src = '';
+      this.registration.img = null;
+      this.deletePhoto = false;
+    },
   },
   validations: {
     registration: {
@@ -240,19 +256,32 @@ export default {
 
 .registration__photo{
   width: 200px;
-  height: 240px;
+  height: 260px;
 }
 
 .registration__photo-imges{
   width: 200px;
-  height: 200px;
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+
+.registration__photo-imges:hover .registration__photo-delete{
+  opacity: 1;
 }
 
 .registration__photo-imges>img{
   width: 200px;
-  height: 200px;
+  height: auto;
 }
 
+.registration__photo-delete{
+  opacity: 0;
+  transition: opacity .20s;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 .registration__photo-button{
   width: 100%;
   display: flex;
