@@ -84,4 +84,12 @@ export default {
 .modal__error-text{
   color: rgba(244, 44, 44, 0.99);
 }
+
+.modal__error-form{
+  border: 1px solid rgba(244, 44, 44, 0.99);
+}
+
+.modal__error-checkbox{
+  box-shadow: 0px 0px 2px 2px rgba(244, 44, 44, 0.99);
+}
 </style>

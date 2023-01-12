@@ -40,8 +40,10 @@
               <input 
                 type="text" 
                 name="name" 
-                class="form-control" 
-                v-model="registration.name">
+                class="form-control"
+                :class="[v$.registration.name.$error ? 'modal__error-form' : '']" 
+                placeholder="никнейм"
+                v-model="stete.registration.name">
                 <span v-if="v$.registration.name.$error" class="modal__error-text">обязательное поле</span>
             </div>
             <div class="mb-3">
@@ -50,18 +52,27 @@
                 type="password" 
                 name="password" 
                 class="form-control"
-                v-model="registration.password">
-                <span v-if="v$.registration.password.$error" class="modal__error-text">обязательное поле</span>
-                <span v-else-if="v$.registration.password.minLength" class="modal__error-text"></span>
+                :class="[v$.registration.password.minLength.$error || v$.registration.password.$error ? 'modal__error-form' : '']"
+                placeholder="пароль для входа"
+                v-model="stete.registration.password">
+                <!-- <span v-if="v$.registration.password.$error" class="modal__error-text">обязательное поле</span> -->
+                <span 
+                  v-if="v$.registration.password.minLength.$invalid"
+                  class="modal__error-text">пароль не может быть меньше {{v$.registration.password.minLength.$params.min}}</span>
+                <span v-else-if="v$.registration.password.$error" class="modal__error-text">обязательное поле</span>
+                  
             </div>
             <div class="mb-3">
               <label for="confirmPassword" class="form-label modal__window-label">повторить пароль</label>
               <input 
                 type="password" 
                 name="confirmPassword"
-                placeholder="confirm password" 
+                placeholder="повторите пароль" 
                 class="form-control"
-                v-model="registration.confirmPassword">
+                :class="[v$.registration.confirmPassword.sameAs.$invalid || v$.registration.confirmPassword.$error ? 'modal__error-form' : '']"
+                v-model="stete.registration.confirmPassword">
+                <span v-if="v$.registration.confirmPassword.sameAs.$invalid" class="modal__error-text">пароль не совпадает</span>
+                <span v-else-if="v$.registration.confirmPassword.$error" class="modal__error-text">обязательное поле</span>
             </div>
           </div>
         </div>
@@ -73,7 +84,10 @@
               type="text" 
               name="number" 
               class="form-control"
-              v-model="registration.number">
+              :class="[ v$.registration.number.$error ? 'modal__error-form' : '' ]"
+              placeholder="+7 (XXX) XXX-XX-ХХ"
+              v-model="stete.registration.number">
+            <span v-if="v$.registration.number.$error" class="modal__error-text">обязательное поле</span>
           </div>
           <div class="mb-3">
             <label for="mail" class="form-label modal__window-label">почта</label>
@@ -81,7 +95,11 @@
               type="text" 
               name="mail" 
               class="form-control"
-              v-model="registration.mail">
+              :class="[ v$.registration.mail.email.$invalid || v$.registration.mail.$error ? 'modal__error-form' : '']"
+              placeholder="XXXXXXXX@XXXX.XX"
+              v-model="stete.registration.mail">
+            <span v-if="v$.registration.mail.email.$invalid" class="modal__error-text">некорректный email</span>
+            <span v-else-if="v$.registration.mail.$error" class="modal__error-text">обязательное поле</span>
           </div>
           <div class="row">
             <div class="col-sm">
@@ -92,27 +110,31 @@
                 <input 
                   type="radio" 
                   class="form-check-input" 
-                  name="woman"
+                  name="gender"
+                  id="woman"
                   vulue="woman"
-                  v-model="registration.gender">
+                  v-model="stete.registration.gender">
                 <label class="form-check-label" for="woman">ж</label>
               </div>
               <div class="form-check">
                 <input 
                   type="radio" 
                   class="form-check-input" 
-                  name="male"
+                  name="gender"
+                  id="male"
                   value="male"
-                  v-model="registration.gender">
+                  checked
+                  v-model="stete.registration.gender">
                 <label class="form-check-label" for="male">м</label>
               </div>
               <div class="form-check">
                 <input 
                   type="radio" 
                   class="form-check-input" 
-                  name="third_gender"
+                  name="gender"
+                  id="third_gender"
                   value="third_gender"
-                  v-model="registration.gender">
+                  v-model="stete.registration.gender">
                 <label class="form-check-label" for="third_gender">другое</label>
               </div>
             </div>
@@ -139,14 +161,19 @@
               </div>
             </div>
           </div>
-          <div>
-            <label for="agreement" class="form-check-label">Согласие на обработку персональных данных</label>
+          <div class="registration__checkbox-block">
+            <label 
+              for="agreement"
+              :class="[ v$.registration.agreement.$error ? 'modal__error-text' : '' ]"
+              class="form-check-label registration__checkbox-text"
+              >Согласие на обработку персональных данных</label>
             <input 
-              class="form-check-input" 
+              class="form-check-input registration__checkbox"
+              :class="[ v$.registration.agreement.$error ? 'modal__error-checkbox' : '' ]" 
               type="checkbox" 
               id="agreement"
               value="true" 
-              v-model="registration.agreement">
+              v-model="stete.registration.agreement">
           </div>
         </div>
         
@@ -158,17 +185,16 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
+import { required, minLength, email, sameAs } from '@vuelidate/validators'
+import { reactive, computed } from 'vue'
 
 export default {
   name: 'RegistrationComponent',
   props: {
     msg: String
   },
-  data () {
-    return {
-      v$: useVuelidate(),
-      accept: [ '.png', '.jpg', '.jpeg', '.gif' ],
+  setup(){
+    const stete = reactive({
       registration: {
         img: null,
         name: null,
@@ -180,6 +206,31 @@ export default {
         country: null,
         agreement: false,
       },
+    });
+
+    const rules = computed(() => {
+      return {
+        registration: {
+          name: { required },
+          password: { required, minLength: minLength(6) },
+          confirmPassword: { required, sameAs: sameAs(stete.registration.password) },
+          number: { required },
+          mail: { required, email },
+          agreement: { required, sameAs: sameAs(true) },
+        }
+      }
+    });
+
+    const v$ = useVuelidate(rules, stete);
+
+    return {
+      stete,
+      v$
+    }
+  },
+  data () {
+    return {
+      accept: [ '.png', '.jpg', '.jpeg', '.gif' ],
       deletePhoto: false,
     }
   },
@@ -188,7 +239,9 @@ export default {
       this.$store.dispatch('SET_REGISTRATION', false);
     },
     sendData () {
-      console.log(this.registration);
+      console.log(this.v$.registration.agreement);
+      // console.log(this.v$.registration.password.required);
+      // console.log(this.v$.registration.email.required);
 
       this.v$.$validate();
 
@@ -241,13 +294,9 @@ export default {
       this.deletePhoto = false;
     },
   },
-  validations: {
-    registration: {
-      name: { required },
-      password: { required, minLength: minLength(6) },
-      confirmPassword: { required },
-    }
-  }
+  // validations: {
+    
+  // }
 }
 </script>
 
@@ -289,6 +338,18 @@ export default {
 
 .registration__photo-button>button{
   width: 100%;
+}
+
+.registration__checkbox-block{
+  display: flex;
+}
+
+.registration__checkbox-text{
+  margin: auto 0;
+}
+
+.registration__checkbox{
+  margin: auto .5rem;
 }
 
   @import'~bootstrap/dist/css/bootstrap.css'
